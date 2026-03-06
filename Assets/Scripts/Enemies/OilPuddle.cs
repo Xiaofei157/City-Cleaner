@@ -27,7 +27,7 @@ public class OilPuddle : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             PlayerStats player = collision.GetComponent<PlayerStats>();
-            if (player != null) player.moveSpeed *= 0.2f; // 减速50%
+            if (player != null) player.moveSpeed *= 0.5f; // 减速50%
         }
     }
 
