@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913e48bcd639e7644975e3ddf9346e1e, type: 3}
+  m_Name: TireTerror_Data
+  m_EditorClassIdentifier: 
+  enemyName: "\u5E9F\u5F03\u8F6E\u80CE\u602A"
+  prefab: {fileID: 6544495145183764074, guid: 46a37129fb5425741ac1a7db4265ffc7, type: 3}
+  maxHP: 30
+  moveSpeed: 2.5
+  xpDrop: 2
+  goldDropChance: 0
+  minLevelAppearance: 2
+  maxLevelAppearance: 10000

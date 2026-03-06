@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1c1290bf6100e94da14313d9b6f951b, type: 3}
+  m_Name: Spray_Data
+  m_EditorClassIdentifier: 
+  weaponName: "\u6D88\u6BD2\u55B7\u96FE"
+  icon: {fileID: 21300000, guid: d9250ddd93e272f44ae5f4e33a529b4b, type: 3}
+  description: "\u5411\u524D\u65B9\u6247\u5F62\u533A\u57DF\u55B7\u6D12\u6D88\u6BD2\u6DB2\uFF0C\u9020\u6210\u6301\u7EED\u4F24\u5BB3"
+  prefab: {fileID: 3224981966296983502, guid: 14e1fad1e722f9d40af2b81c9632ad8d, type: 3}
+  baseDamage: 10
+  baseFireRate: 2

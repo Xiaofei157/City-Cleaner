@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913e48bcd639e7644975e3ddf9346e1e, type: 3}
+  m_Name: GreaseSlime_Data
+  m_EditorClassIdentifier: 
+  enemyName: "\u6CB9\u6C61\u53F2\u83B1\u59C6"
+  prefab: {fileID: 4097684154155131521, guid: d1562df69004e804ea96d91a8ae3ab51, type: 3}
+  maxHP: 20
+  moveSpeed: 1
+  xpDrop: 1
+  goldDropChance: 0.034
+  minLevelAppearance: 1
+  maxLevelAppearance: 1000

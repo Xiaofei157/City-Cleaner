@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1c1290bf6100e94da14313d9b6f951b, type: 3}
+  m_Name: Snowplow_Data
+  m_EditorClassIdentifier: 
+  weaponName: "\u626B\u96EA\u8F66"
+  icon: {fileID: 21300000, guid: 7379619de79a3474ab6314ad3e16e83f, type: 3}
+  description: "\u53EC\u5524\u6E05\u96EA\u8F66\u5411\u968F\u673A\u65B9\u5411\u51B2\u523A\uFF0C\u78BE\u788E\u6CBF\u9014\u7684\u4E00\u5207"
+  prefab: {fileID: 8840320538410841458, guid: acbe5d57bc28af44c9852ccf5887010c, type: 3}
+  baseDamage: 10
+  baseFireRate: 0.5
