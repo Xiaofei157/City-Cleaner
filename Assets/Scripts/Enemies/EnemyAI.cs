@@ -12,12 +12,21 @@ public class EnemyAI : MonoBehaviour
     public float attackDamage = 5f; // 怪物对玩家的伤害
     public float attackInterval = 1f; // 多久造成一次伤害
     private float lastAttackTime = 0f;
+    
+    [Header("UI")]
+    public EnemyHealthBar healthBar; // 拖入挂在怪物身上的血条脚本
+    
+    
+    
 
     // 当从对象池中取出怪物时，调用此方法重置状态
     public void Initialize(EnemyData_SO data)
     {
         myData = data;
         currentHP = data.maxHP; // 从数据中读取血量
+        
+        // 【新增：初始化血条】
+        if (healthBar != null) healthBar.Initialize(myData.maxHP);
         
         // 获取 Animator 组件（如果敌人预制体上有）
         if (animator == null)
@@ -73,6 +82,8 @@ public class EnemyAI : MonoBehaviour
     {
         currentHP -= damage;
         
+        // 【新增：更新血条并显示数字】
+        if (healthBar != null) healthBar.UpdateHealth(currentHP, myData.maxHP);
         // 【新增：生成伤害飘字】
         ShowDamageText(damage);
 
