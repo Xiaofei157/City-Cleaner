@@ -24,7 +24,7 @@ public class TrashCanWeapon : WeaponBase
             if (lure != null)
             {
                 // 文档中垃圾桶基础伤害为空，我们这里取默认值 10
-                float baseDmg = weaponData.baseDamage > 0 ? weaponData.baseDamage : 10f;
+                float baseDmg = weaponData.baseDamage > 0 ? weaponData.baseDamage : 5f;
                 // 计算最终伤害：(武器基础伤害) * (1 + 攻击力加成%)
                 float finalDamage = playerStats.GetFinalDamage(baseDmg);
                 

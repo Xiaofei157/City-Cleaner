@@ -17,6 +17,11 @@ MonoBehaviour:
   maxHP: 20
   moveSpeed: 1
   xpDrop: 1
-  goldDropChance: 0.034
+  goldDropChance: 0.392
+  goldDropMin: 1
+  goldDropMax: 5
   minLevelAppearance: 1
   maxLevelAppearance: 1000
+  isBoss: 0
+  isElite: 0
+  specificLevels: 

@@ -46,4 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: 2560ee22496be704c9a86ef0a8aac07c, type: 2}
   trashCanPrefab: {fileID: 3302223709936879461, guid: 786311e701aa94b45964716b00687de2, type: 3}
-  spawnRadius: 4
+  spawnRadius: 2

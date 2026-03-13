@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: xueliang_Data
   m_EditorClassIdentifier: 
   cardName: "\u8840\u91CF\u63D0\u5347"
-  icon: {fileID: 21300000, guid: ede6853c630b605409a51cdd148e7a9e, type: 3}
+  icon: {fileID: 21300000, guid: 51a1bf86bc6f03a4a9e3e54f8525f5a8, type: 3}
   description: "\u63D0\u534710\u70B9\u8840\u91CF"
   rarity: 0
   canAppearConsecutively: 1

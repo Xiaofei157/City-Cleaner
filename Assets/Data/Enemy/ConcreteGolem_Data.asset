@@ -18,5 +18,10 @@ MonoBehaviour:
   moveSpeed: 1
   xpDrop: 50
   goldDropChance: 1
-  minLevelAppearance: 5
-  maxLevelAppearance: 0
+  goldDropMin: 1
+  goldDropMax: 5
+  minLevelAppearance: 1
+  maxLevelAppearance: 100
+  isBoss: 0
+  isElite: 1
+  specificLevels: 

@@ -16,24 +16,8 @@ public class TireTerrorAI : EnemyAI
     // 重写 Update 方法
     protected override void Update()
     {
-        // 我们需要访问父类的 playerTarget，请确保 EnemyAI.cs 里它是 protected Transform playerTarget;
-        // 如果无法访问，可以使用 GameObject.FindGameObjectWithTag("Player").transform 获取
-        Transform target = GameObject.FindGameObjectWithTag("Player").transform;
-        if (target == null) return;
-
-        if (!isCharging)
-        {
-            // 正常追踪（调用父类的移动逻辑）
-            base.Update();
-            
-            // 冷却计时
-            currentCooldown -= Time.deltaTime;
-            if (currentCooldown <= 0)
-            {
-                StartCharge(target);
-            }
-        }
-        else
+        // 如果正在冲锋，跳过父类的 Update 逻辑
+        if (isCharging)
         {
             // 冲锋状态：无视正常的追踪，沿锁定的方向高速直线移动
             currentChargeTime -= Time.deltaTime;
@@ -45,6 +29,32 @@ public class TireTerrorAI : EnemyAI
             {
                 StopCharge();
             }
+            return;
+        }
+        
+        // 非冲锋状态：正常执行父类 Update 逻辑
+        base.Update();
+        
+        // 确保有目标才能继续
+        if (currentTarget == null)
+        {
+            // 尝试重新获取玩家目标
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                currentTarget = player.transform;
+            }
+            else
+            {
+                return; // 没有目标，直接返回
+            }
+        }
+        
+        // 冷却计时
+        currentCooldown -= Time.deltaTime;
+        if (currentCooldown <= 0 && currentTarget != null)
+        {
+            StartCharge(currentTarget);
         }
     }
 

@@ -1,11 +1,12 @@
 using UnityEngine;
 
-// 水枪：向怪物方向发射水流 
+// 水枪：以玩家为中心向怪物方向发射水流 
 public class WaterGunWeapon : WeaponBase
 {
     [Header("水枪专属配置")]
     public GameObject waterBulletPrefab; // 水流子弹的预制体
     public float attackRange = 10f; // 索敌范围
+    public float spawnOffset = 0.5f; // 子弹生成位置偏移（从玩家中心向外偏移）
 
     protected override void Attack()
     {
@@ -16,11 +17,19 @@ public class WaterGunWeapon : WeaponBase
         // 2. 从对象池获取子弹 
         if (PoolManager.Instance != null && waterBulletPrefab != null)
         {
+            // 获取玩家位置作为发射点
+            Vector3 playerPosition = transform.position;
+            
+            // 计算从玩家到敌人的方向
+            Vector3 direction = (nearestEnemy.position - playerPosition).normalized;
+            
+            // 在玩家前方一定距离生成子弹，避免与玩家碰撞
+            Vector3 spawnPosition = playerPosition + direction * spawnOffset;
+            
             GameObject bullet = PoolManager.Instance.Get(waterBulletPrefab);
-            bullet.transform.position = transform.position;
+            bullet.transform.position = spawnPosition;
 
             // 3. 计算对准敌人的角度并旋转子弹
-            Vector3 direction = (nearestEnemy.position - transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
 

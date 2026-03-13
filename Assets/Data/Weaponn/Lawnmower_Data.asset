@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lawnmower_Data
   m_EditorClassIdentifier: 
   weaponName: "\u5730\u523A"
-  icon: {fileID: 21300000, guid: 7379619de79a3474ab6314ad3e16e83f, type: 3}
+  icon: {fileID: 21300000, guid: 166b6d400b496264c932baff11f197b2, type: 3}
   description: "\u5730\u523A"
   prefab: {fileID: 4954076532391794674, guid: 5d880efd9b6070a429c250a259f76c46, type: 3}
   baseDamage: 10

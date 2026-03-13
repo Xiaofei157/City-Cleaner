@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: sudu_Data
   m_EditorClassIdentifier: 
   cardName: "\u79FB\u52A8\u901F\u5EA6\u63D0\u5347"
-  icon: {fileID: 21300000, guid: ede6853c630b605409a51cdd148e7a9e, type: 3}
+  icon: {fileID: 21300000, guid: 2668d5a8d65fee443ac5a9ef47e350c2, type: 3}
   description: "\u63D0\u534710\u70B9\u79FB\u52A8\u901F\u5EA6"
   rarity: 0
   canAppearConsecutively: 1

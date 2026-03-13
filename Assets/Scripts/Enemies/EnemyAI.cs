@@ -7,6 +7,8 @@ public class EnemyAI : MonoBehaviour
     protected Transform playerTarget;
     protected Transform currentTarget; // 当前实际攻击的目标（可能是玩家或垃圾桶）
     protected Animator animator; // 修改为 protected，允许子类访问
+    protected SpriteRenderer spriteRenderer; // 用于控制怪物朝向
+    protected Rigidbody2D rb; // 用于物理移动
     
     [Header("攻击设置")]
     public float attackDamage = 5f; // 怪物对玩家的伤害
@@ -16,9 +18,6 @@ public class EnemyAI : MonoBehaviour
     [Header("UI")]
     public EnemyHealthBar healthBar; // 拖入挂在怪物身上的血条脚本
     
-    
-    
-
     // 当从对象池中取出怪物时，调用此方法重置状态
     public void Initialize(EnemyData_SO data)
     {
@@ -32,6 +31,14 @@ public class EnemyAI : MonoBehaviour
         if (animator == null)
             animator = GetComponent<Animator>();
         
+        // 获取 SpriteRenderer 组件用于控制朝向
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        
+        // 获取 Rigidbody2D 用于物理移动
+        if (rb == null)
+            rb = GetComponent<Rigidbody2D>();
+        
         // 寻找玩家作为目标
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null) playerTarget = player.transform;
@@ -41,6 +48,7 @@ public class EnemyAI : MonoBehaviour
         
         gameObject.SetActive(true); 
     }
+    
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("TrashCan"))
@@ -70,14 +78,43 @@ public class EnemyAI : MonoBehaviour
     {
         if (currentTarget != null)
         {
-            // 向当前目标方向移动
-            transform.position = Vector2.MoveTowards(transform.position, currentTarget.position, myData.moveSpeed * Time.deltaTime);
+            // 根据移动方向翻转图片朝向
+            FlipSprite();
         }
     }
-
-    // 在 EnemyAI 类中，你可以添加这个静态/全局方便读取的路径，或者直接用 Resources 加载
-    // 这样不用去 8 个怪物的面板里挨个拖拽预制体！
-
+    
+    protected virtual void FixedUpdate()
+    {
+        if (currentTarget != null && rb != null)
+        {
+            // 使用物理方式向当前目标方向移动
+            Vector2 direction = (currentTarget.position - transform.position).normalized;
+            rb.MovePosition(rb.position + direction * myData.moveSpeed * Time.fixedDeltaTime);
+        }
+    }
+    
+    /// <summary>
+    /// 根据目标方向翻转怪物图片
+    /// </summary>
+    protected void FlipSprite()
+    {
+        if (spriteRenderer == null || currentTarget == null) return;
+        
+        // 计算目标相对于当前位置的方向
+        Vector2 direction = (Vector2)currentTarget.position - (Vector2)transform.position;
+        
+        // 如果目标在左边，且当前未朝左，则翻转
+        if (direction.x < 0 && spriteRenderer.flipX == false)
+        {
+            spriteRenderer.flipX = true;
+        }
+        // 如果目标在右边，且当前未朝右，则翻转
+        else if (direction.x > 0 && spriteRenderer.flipX == true)
+        {
+            spriteRenderer.flipX = false;
+        }
+    }
+    
     public virtual void TakeDamage(float damage)
     {
         currentHP -= damage;
@@ -189,15 +226,48 @@ public class EnemyAI : MonoBehaviour
         Destroy(clampEffect, 0.5f);
     }
     
-    
-    
-    
     protected virtual void Die()
     {
         // 怪物死亡一定会掉落 xp
         DropXP(myData.xpDrop);
+        
+        // 概率掉落金币
+        DropGold();
+        
         // 放回对象池
-        gameObject.SetActive(false);
+        if (PoolManager.Instance != null)
+        {
+            PoolManager.Instance.Return(gameObject);
+        }
+        else
+        {
+            // 如果对象池不存在，才直接销毁
+            Destroy(gameObject);
+        }
+    }
+    
+    /// <summary>
+    /// 概率掉落金币
+    /// </summary>
+    private void DropGold()
+    {
+        // 根据概率判断是否掉落金币
+        if (Random.value <= myData.goldDropChance)
+        {
+            // 随机生成金币数量
+            int goldAmount = Random.Range(myData.goldDropMin, myData.goldDropMax + 1);
+            
+            // 获取玩家并添加金币
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                PlayerStats playerStats = player.GetComponent<PlayerStats>();
+                if (playerStats != null)
+                {
+                    playerStats.AddGold(goldAmount);
+                }
+            }
+        }
     }
 
     private void DropXP(int amount) 

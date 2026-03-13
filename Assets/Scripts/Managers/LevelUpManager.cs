@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelUpManager : MonoBehaviour
+public class LevelUpManager : MonoSingleton<LevelUpManager>
 {
-    public static LevelUpManager Instance { get; private set; }
-
     public GameObject levelUpPanel;
     public Transform cardContainer;
     public GameObject cardPrefab;
@@ -13,13 +11,24 @@ public class LevelUpManager : MonoBehaviour
     public List<UpgradeCard_SO> allNormalUpgrades;
     public List<WeaponData_SO> allPossibleWeapons;
     
-    private void Awake() => Instance = this;
-    
     /// <summary>
     /// 显示升级 UI 并生成三张随机卡片
     /// </summary>
     public void ShowLevelUpUI()
     {
+        // 0. 检查必要引用
+        if (levelUpPanel == null)
+        {
+            Debug.LogError("LevelUpManager: levelUpPanel 为空！请在 Inspector 面板赋值。");
+            return;
+        }
+        
+        if (cardContainer == null)
+        {
+            Debug.LogError("LevelUpManager: cardContainer 为空！请在 Inspector 面板赋值。");
+            return;
+        }
+        
         // 1. 暂停游戏
         Time.timeScale = 0f;
         levelUpPanel.SetActive(true);
@@ -36,12 +45,32 @@ public class LevelUpManager : MonoBehaviour
     /// </summary>
     private void ClearAllCards()
     {
+        if (cardContainer == null)
+        {
+            Debug.LogError("LevelUpManager: cardContainer 为空！无法清空卡片。");
+            return;
+        }
+        
+        // 先复制一份子对象列表，避免在遍历过程中修改集合导致的问题
+        List<Transform> childrenToDestroy = new List<Transform>();
         foreach (Transform child in cardContainer)
         {
-            if (Application.isPlaying)
-                Destroy(child.gameObject);
-            else
-                DestroyImmediate(child.gameObject);
+            if (child != null)
+            {
+                childrenToDestroy.Add(child);
+            }
+        }
+        
+        // 统一销毁所有子对象
+        foreach (Transform child in childrenToDestroy)
+        {
+            if (child != null)
+            {
+                if (Application.isPlaying)
+                    Destroy(child.gameObject);
+                else
+                    DestroyImmediate(child.gameObject);
+            }
         }
     }
     
@@ -129,21 +158,29 @@ public class LevelUpManager : MonoBehaviour
     // --- 应用效果 ---
     public void ApplyUpgrade(UpgradeCard_SO buff)
     {
-        PlayerStats stats = FindObjectOfType<PlayerStats>();
-        // [cite_start]应用公式：数值提升直接加，百分比提升用原本的*(1+提升/100) [cite: 37, 38]
+        PlayerStats stats = PlayerStats.Instance;
+            
+        // 构建属性修改上下文
+        PropertyData ctx = new PropertyData();
+            
+        // [cite_start]应用公式：数值提升直接加，百分比提升用原本的*(1+ 提升/100) [cite: 37, 38]
         switch (buff.statType)
         {
-            case StatType.HP: 
-                stats.maxHealth += buff.value; 
-                stats.currentHealth += buff.value; // 加上限顺便加当前血量
+            case StatType.HP:
+                ctx.maxHealthDelta = buff.value;
+                ctx.currentHealthDelta = buff.value; // 加上限顺便加当前血量
                 break;
-            case StatType.AttackSpeed: 
-                stats.attackSpeedBonus += buff.value; 
+            case StatType.AttackSpeed:
+                ctx.attackSpeedDelta = buff.value;
                 break;
-            case StatType.MoveSpeed: 
-                stats.moveSpeed += stats.moveSpeed * (buff.value / 100f); 
+            case StatType.MoveSpeed:
+                ctx.moveSpeedPercent = buff.value; // 百分比提升
                 break;
         }
+            
+        // 将修改数据传递给 PlayerStats 处理
+        stats.ApplyPropertyChange(ctx);
+            
         CloseUI();
     }
 

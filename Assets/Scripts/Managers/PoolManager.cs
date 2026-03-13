@@ -48,4 +48,12 @@ public class PoolManager : MonoBehaviour
             poolDictionary[obj.name].Enqueue(obj);
         }
     }
+    
+    /// <summary>
+    /// 清空所有对象池（场景切换时调用，防止引用已销毁的对象）
+    /// </summary>
+    public void ClearAllPools()
+    {
+        poolDictionary.Clear();
+    }
 }

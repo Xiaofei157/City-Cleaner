@@ -27,7 +27,7 @@ public class OilPuddle : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             PlayerStats player = collision.GetComponent<PlayerStats>();
-            if (player != null) player.moveSpeed *= 0.5f; // 减速50%
+            if (player != null) player.ChangePlayerMoveSpeed(0.5f); // 减速50%
         }
     }
 
@@ -38,7 +38,7 @@ public class OilPuddle : MonoBehaviour
         {
             PlayerStats player = collision.GetComponent<PlayerStats>();
             // 注意：这里简单还原，实际项目中最好记录原始速度
-            if (player != null) player.moveSpeed *= 2f; 
+            if (player != null) player.ChangePlayerMoveSpeed(2f);
         }
     }
 }

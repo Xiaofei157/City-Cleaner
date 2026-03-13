@@ -1,25 +1,36 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI; // 引入基础 UI 命名空间
+using UnityEngine.SceneManagement; // 用于场景加载
 using TMPro; // 推荐使用 TextMeshPro 来实现更清晰的文字显示
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
+    [Header("面板父物体")]
+    [SerializeField] private GameObject panelParent;
+    
+    [SerializeField] private GameObject HUDPanel;
+    
+    [Header("暂停相关")]
+    private PausePanel currentPausePanel; // 当前暂停面板实例
+    private bool isGamePaused = false; // 游戏是否处于暂停状态
+    
     [Header("左上角：玩家状态")]
     public Slider healthBar; // 玩家自身的血条
     public Text levelText; // 玩家等级
     public Text healthText; // 新增：显示生命值数值（如 80/100）
     public Text xpText;     // 新增：显示经验值数值（如 15/50）
 
-    [Header("底部：经验条")]
+    [Header("顶部：经验条")]
     public Slider xpBar;    // 新增：经验条进度
 
-    [Header("右上角：资源")]
+    [Header("右下角：资源")]
     public Text goldText; // 金币数量
 
-    [Header("左下角：武器显示 (最多4个)")]
-    public Image[] weaponSlots; // 存放4个武器图片的数组
+    [Header("左下角：武器显示 (最多 4 个)")]
+    public Image[] weaponSlots; // 存放 4 个武器图片的数组
 
     private void Awake()
     {
@@ -32,6 +43,66 @@ public class UIManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePause();
+        }
+    }
+    
+    /// <summary>
+    /// 切换暂停状态
+    /// </summary>
+    private void TogglePause()
+    {
+        if (isGamePaused)
+        {
+            // 如果已暂停，则恢复游戏
+            if (currentPausePanel != null)
+            {
+                currentPausePanel.HidePausePanel();
+                currentPausePanel = null;
+            }
+            isGamePaused = false;
+        }
+        else
+        {
+            // 如果未暂停，则显示暂停面板
+            GameObject pausePanelPrefab = ResourcesManager.Instance.LoadPrefab("PausePanel");
+            GameObject pausePanel = Instantiate(pausePanelPrefab, panelParent.transform);
+            currentPausePanel = pausePanel.GetComponent<PausePanel>();
+            if (currentPausePanel != null)
+            {
+                currentPausePanel.ShowPausePanel();
+            }
+            isGamePaused = true;
+        }
+    }
+    
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "SampleScene")
+        {
+            HUDPanel.SetActive(false);
+        }
+        else
+        {
+            HUDPanel.SetActive(true);
+        }
+        PoolManager.Instance.ClearAllPools();
     }
 
     // 更新玩家血条显示
